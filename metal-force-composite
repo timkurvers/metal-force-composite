@@ -1,0 +1,27 @@
+#!/usr/bin/env swift
+
+import AppKit
+
+let app = NSApplication.shared
+app.setActivationPolicy(.accessory) // no Dock icon, never takes focus
+
+let panel = NSPanel(
+    contentRect: NSRect(x: 0, y: 0, width: 4, height: 4),
+    styleMask: [.borderless, .nonactivatingPanel],
+    backing: .buffered,
+    defer: false
+)
+
+panel.level = .screenSaver
+panel.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary, .stationary, .ignoresCycle]
+panel.ignoresMouseEvents = true
+panel.isOpaque = false
+panel.hasShadow = false
+
+// A fully transparent window may be skipped by WindowServer, so keep a trace of alpha.
+panel.backgroundColor = NSColor.black.withAlphaComponent(0.01)
+
+panel.orderFrontRegardless()
+print("Forcing composited rendering. Press Ctrl+C to stop.")
+fflush(stdout)
+app.run()
